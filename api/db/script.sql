@@ -25,6 +25,8 @@ CREATE TABLE `restaurant` (
   `street` varchar(255) NOT NULL,
   `complement` varchar(255) NOT NULL,
   `neighborhood` varchar(255) NOT NULL,
+  `longitude` float(10,6) NOT NULL,
+  `latitude` float(10,6) NOT NULL,
   `cityId` int(11) NOT NULL,
   `stateId` int(11) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -37,8 +39,8 @@ CREATE TABLE `schedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `restaurantId` int(11) NOT NULL,
   `day` int(11),
-  `initialHour` varchar(255) NOT NULL,
-  `finalHour` varchar(255) NOT NULL,
+  `initialHour` TIME NOT NULL,
+  `finalHour` TIME NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   CONSTRAINT `fk_s_restaurant` FOREIGN KEY (`restaurantId`) REFERENCES `restaurant` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

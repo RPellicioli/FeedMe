@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 // Routes - Containers
 const loginRoutes = require('./routes/login');
 const usersRoutes = require('./routes/users');
+const restaurantsRoutes = require('./routes/restaurants');
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use(bodyParser.json());
 
 app.use('/login', loginRoutes);
 app.use('/users', usersRoutes);
+app.use('/restaurants', restaurantsRoutes);
 
 app.listen(3000, () => console.log('Express server is running at port number: 3000'));
