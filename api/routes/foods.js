@@ -3,9 +3,11 @@ const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 
-//Get restaurant by userId
-router.get('/user/:userId', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM restaurant WHERE userId = ?', [req.params.userId], (error, rows, fields) => {
+//Get food different listId
+router.get('/random', authService.verifyToken, (req, res, next) => {
+    var listIds = JSON.parse(req.query.listIds);
+
+    connection.query('SELECT * FROM food WHERE id NOT IN (?)', [listIds], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -17,9 +19,23 @@ router.get('/user/:userId', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Delete restaurant by id
+//Get food by id
+router.get('/:id', authService.verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM food WHERE userId = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send(rows);
+        }
+        else {
+            console.log(error);
+            res.send(error);
+            next();
+        }
+    });
+});
+
+//Delete food by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('DELETE FROM restaurant WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('DELETE FROM food WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Deleted successfully.');
         }
@@ -31,13 +47,13 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Insert an restaurant
+//Insert an food
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const created = dateUtils.getCurrentDate();
-    const query = 'INSERT INTO restaurant(`userId`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `longitude`, `latitude`, `cityId`, `stateId`, `created`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO food(`restaurantId`, `name`, `price`, `description`, `active`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
 
-    connection.query(query, [post.userId, post.cnpj, post.cep, post.number, post.street, post.complement, post.neighborhood, post.longitude, post.latitude, post.cityId, post.stateId, created], (error, rows, fields) => {
+    connection.query(query, [post.restaurantId, post.name, post.price, post.description, post.active, created], (error, rows, fields) => {
         if (!error) {
             res.status(201).send(rows[0][0]);
         }
@@ -49,13 +65,13 @@ router.post('/', authService.verifyToken, (req, res, next) => {
     });
 });
 
-//Update an restaurant
+//Update an food
 router.put('/:id', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const updated = dateUtils.getCurrentDate();
-    const query = 'UPDATE restaurant SET `cnpj` = ?, `cep` = ?, `number` = ?, `street` = ?, `complement` = ?, `neighborhood` = ?, `longitude` = ?, `latitude` = ?, `cityId` = ?, `stateId` = ?, `updated` = ? WHERE id = ?';
+    const query = 'UPDATE food SET `name` = ?, `price` = ?, `description` = ?, `active` = ?, `updated` = ? WHERE id = ?';
 
-    connection.query(query, [post.cnpj, post.cep, post.number, post.street, post.complement, post.neighborhood, post.longitude, post.latitude, post.cityId, post.stateId, updated, req.params.id], (error, rows, fields) => {
+    connection.query(query, [post.name, post.price, post.description, post.active, updated, req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }

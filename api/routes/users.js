@@ -17,6 +17,48 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
     });
 });
 
+//Get matchs by userId
+router.get('/:id/matchs', authService.verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM match WHERE userId = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send(rows);
+        }
+        else {
+            console.log(error);
+            res.send(error);
+            next();
+        }
+    });
+});
+
+//Get restaurant by userId
+router.get('/:id/restaurant', authService.verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM restaurant WHERE userId = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send(rows);
+        }
+        else {
+            console.log(error);
+            res.send(error);
+            next();
+        }
+    });
+});
+
+//Delete all matchs by userId
+router.delete('/:id/matchs', authService.verifyToken, (req, res, next) => {
+    connection.query('DELETE FROM match WHERE userId = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send('Deleted successfully.');
+        }
+        else {
+            console.log(error);
+            res.status(500).send(error);
+            next();
+        }
+    });
+});
+
 //Delete user by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
