@@ -19,8 +19,9 @@ CREATE TABLE `user` (
 CREATE TABLE `restaurant` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
-  `cnpj` int(14) NOT NULL,
-  `cep` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `cnpj` bigint(11) NOT NULL,
+  `cep` bigint(11) NOT NULL,
   `number` int(11) NOT NULL,
   `street` varchar(255) NOT NULL,
   `complement` varchar(255) NOT NULL,
@@ -32,6 +33,7 @@ CREATE TABLE `restaurant` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`),
+   UNIQUE KEY `userId` (`userId`),
    CONSTRAINT `fk_r_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -49,6 +51,7 @@ CREATE TABLE `food` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `restaurantId` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `price` float(10,2) NOT NULL,
   `description` text COLLATE utf8_unicode_ci,
   `active` tinyint(1) DEFAULT '0',

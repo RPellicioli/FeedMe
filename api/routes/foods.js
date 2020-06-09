@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
+const dateUtils = require('../utils/date-utils');
 
 //Get food different listId
 router.get('/random', authService.verifyToken, (req, res, next) => {
@@ -51,11 +52,11 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const created = dateUtils.getCurrentDate();
-    const query = 'INSERT INTO food(`restaurantId`, `name`, `price`, `description`, `active`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
-    connection.query(query, [post.restaurantId, post.name, post.price, post.description, post.active, created], (error, rows, fields) => {
+    connection.query(query, [post.restaurantId, post.name, post.image, post.price, post.description, post.active, created], (error, rows, fields) => {
         if (!error) {
-            res.status(201).send(rows[0][0]);
+            res.status(201).send({ id: rows.insertId });
         }
         else {
             console.log(error);

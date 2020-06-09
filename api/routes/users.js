@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
+const dateUtils = require('../utils/date-utils');
 
 //Get user by id
 router.get('/:id', authService.verifyToken, (req, res, next) => {
@@ -81,7 +82,7 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 
     connection.query(query, [post.name, post.email, post.password, post.admin, created], (error, rows, fields) => {
         if (!error) {
-            res.status(201).send(rows[0][0]);
+            res.status(201).send({ id: rows.insertId });
         }
         else {
             console.log(error);

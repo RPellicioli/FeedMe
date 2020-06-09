@@ -25,7 +25,7 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 
     connection.query(query, [post.userId, post.foodId], (error, rows, fields) => {
         if (!error) {
-            res.status(201).send(rows[0][0]);
+            res.status(201).send({ id: rows.insertId });
         }
         else {
             console.log(error);
