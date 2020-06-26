@@ -4,6 +4,20 @@ const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils');
 
+//Get schedule by restaurantId
+router.get('/:restaurantId/schedule', authService.verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM schedule WHERE restaurantId = ?', [req.params.restaurantId], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send(rows);
+        }
+        else {
+            console.log(error);
+            res.send(error);
+            next();
+        }
+    });
+});
+
 //Delete restaurant by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('DELETE FROM restaurant WHERE id = ?', [req.params.id], (error, rows, fields) => {
@@ -28,6 +42,33 @@ router.post('/', authService.verifyToken, (req, res, next) => {
         if (!error) {
             console.log(rows);
             res.status(201).send({ id: rows.insertId });
+        }
+        else {
+            console.log(error);
+            res.status(500).send(error);
+            next();
+        }
+    });
+});
+
+//Insert schedule by restaurantId
+router.post('/:restaurantId/schedule', authService.verifyToken, (req, res, next) => {
+    connection.query('DELETE FROM schedule WHERE restaurantId = ?', [req.params.restaurantId], (error, rows, fields) => {
+        if (!error) {
+            const schedules = req.body.schedules;
+            const query = 'INSERT INTO schedule(`restaurantId`, `day`, `initialHour`, `finalHour`) VALUES ?';
+
+            connection.query(query, schedules, (error, rows, fields) => {
+                if (!error) {
+                    console.log(rows);
+                    res.status(201).send({ id: rows.insertId });
+                }
+                else {
+                    console.log(error);
+                    res.status(500).send(error);
+                    next();
+                }
+            });
         }
         else {
             console.log(error);
