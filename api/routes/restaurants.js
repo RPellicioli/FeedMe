@@ -53,15 +53,35 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 
 //Insert schedule by restaurantId
 router.post('/:restaurantId/schedule', authService.verifyToken, (req, res, next) => {
+    const schedules = req.body.schedules;
+    
+    if(!schedules){
+        res.status(500).send("Schedules not be empty");
+    }
+
     connection.query('DELETE FROM schedule WHERE restaurantId = ?', [req.params.restaurantId], (error, rows, fields) => {
         if (!error) {
-            const schedules = req.body.schedules;
+            let values = [];
+
+            schedules.forEach(s => {
+                values.push([
+                    s.restaurantId,
+                    s.day,
+                    s.initialHour,
+                    s.finalHour
+                ]);
+            });
+
+            if(values.length === 0){
+                res.status(201).send('successfully');
+            }
+
             const query = 'INSERT INTO schedule(`restaurantId`, `day`, `initialHour`, `finalHour`) VALUES ?';
 
-            connection.query(query, schedules, (error, rows, fields) => {
+            connection.query(query, [values], (error, rows, fields) => {
                 if (!error) {
                     console.log(rows);
-                    res.status(201).send({ id: rows.insertId });
+                    res.status(201).send('Insert successfully');
                 }
                 else {
                     console.log(error);
