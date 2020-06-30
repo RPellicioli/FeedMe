@@ -5,7 +5,7 @@ const authService = require('../services/auth-service');
 
 //Delete match by id
 router.delete('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('DELETE FROM match WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('DELETE FROM `match` WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Deleted successfully.');
         }
@@ -20,8 +20,7 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 //Insert an match
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
-    const created = dateUtils.getCurrentDate();
-    const query = 'INSERT INTO match(`userId`, `foodId`) VALUES (?, ?)';
+    const query = 'INSERT INTO `match`(`userId`, `foodId`) VALUES (?, ?)';
 
     connection.query(query, [post.userId, post.foodId], (error, rows, fields) => {
         if (!error) {

@@ -6,9 +6,15 @@ const dateUtils = require('../utils/date-utils');
 
 //Get food different listId
 router.get('/random', authService.verifyToken, (req, res, next) => {
-    var listIds = JSON.parse(req.query.listIds);
+    let listIds = [];
+    let query = 'SELECT * FROM food WHERE active = 1';
 
-    connection.query('SELECT * FROM food WHERE id NOT IN (?)', [listIds], (error, rows, fields) => {
+    if(req.query.listIds){
+        listIds = JSON.parse(req.query.listIds);
+        query = 'SELECT * FROM food WHERE active = 1 AND id NOT IN (?)';
+    }
+
+    connection.query(query, [listIds], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
@@ -22,7 +28,7 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
 
 //Get food by id
 router.get('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM food WHERE userId = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('SELECT * FROM food WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }
