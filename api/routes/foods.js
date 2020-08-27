@@ -1,8 +1,25 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils');
+const { Storage } = require('@google-cloud/storage');
+const Multer = require('multer');
+
+const storage = new Storage({
+    projectId: "feedme-287719",
+    keyFilename: path.join(__dirname, "../feedme-287719-1a9ae0f6d37b.json")
+});
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+    }
+});
+
+const bucket = storage.bucket('feedme-app');
 
 //Get food different listId
 router.get('/random', authService.verifyToken, (req, res, next) => {
@@ -89,5 +106,63 @@ router.put('/:id', authService.verifyToken, (req, res, next) => {
         }
     });
 });
+
+/**
+ * Adding new file to the storage
+ */
+router.post('/upload', multer.single('file'), (req, res) => {
+    let file = req.file;
+    let path = req.body.path;
+
+    if (file) {
+        uploadImageToStorage(file, path).then((success) => {
+            res.status(200).send({
+                url: success
+            });
+        }).catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+            next();
+        });
+    }
+});
+
+/**
+ * Upload the image file to Google Storage
+ * @param {File} file object that will be uploaded to Google Storage
+ * @param {string} path
+ */
+const uploadImageToStorage = (file, path) => {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            reject('No file');
+        }
+
+        if(path == null || path == ""){
+            path = "foods";
+        }
+
+        let newFileName = `${Date.now()}_${file.originalname}`;
+        let fileUpload = bucket.file(newFileName);
+
+        const blobStream = fileUpload.createWriteStream({
+            metadata: {
+                contentType: file.mimetype
+            }
+        });
+
+        blobStream.on('error', (error) => {
+            console.log(error.response);
+            reject('Something is wrong! Unable to upload at the moment.');
+        });
+
+        blobStream.on('finish', () => {
+            const publicUrl = `https://storage.googleapis.com/${bucket.name}/${(encodeURI(fileUpload.name)).replace("\/", "%2F")}`;
+            resolve(publicUrl);
+        });
+
+        blobStream.end(file.buffer);
+    });
+}
 
 module.exports = router;
