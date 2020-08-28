@@ -4,6 +4,20 @@ const connection = require('../connection');
 const authService = require('../services/auth-service');
 const dateUtils = require('../utils/date-utils');
 
+//Get restaurant by id
+router.get('/:id', authService.verifyToken, (req, res, next) => {
+    connection.query('SELECT * FROM restaurant WHERE id = ?', [req.params.id], (error, rows, fields) => {
+        if (!error) {
+            res.status(200).send(rows);
+        }
+        else {
+            console.log(error);
+            res.send(error);
+            next();
+        }
+    });
+});
+
 //Get schedule by restaurantId
 router.get('/:restaurantId/schedule', authService.verifyToken, (req, res, next) => {
     connection.query('SELECT * FROM schedule WHERE restaurantId = ?', [req.params.restaurantId], (error, rows, fields) => {

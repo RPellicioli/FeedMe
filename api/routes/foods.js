@@ -93,9 +93,9 @@ router.post('/', authService.verifyToken, (req, res, next) => {
 router.put('/:id', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const updated = dateUtils.getCurrentDate();
-    const query = 'UPDATE food SET `name` = ?, `price` = ?, `description` = ?, `active` = ?, `updated` = ? WHERE id = ?';
+    const query = 'UPDATE food SET `name` = ?, `image` = ?, `price` = ?, `description` = ?, `active` = ?, `updated` = ? WHERE id = ?';
 
-    connection.query(query, [post.name, post.price, post.description, post.active, updated, req.params.id], (error, rows, fields) => {
+    connection.query(query, [post.name, post.image, post.price, post.description, post.active, updated, req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }
