@@ -1,7 +1,6 @@
+import 'package:feed_me_app/services/matchs_service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'dart:convert';
 
 class MatchsPage extends StatefulWidget {
   @override
@@ -16,16 +15,9 @@ class _MatchsPageState extends State<MatchsPage> {
     super.initState();
 
     setState(() {
-      getMatchs();
+      getMatchs().then((value) => debugPrint(value.toString()));
       startList();
     });
-  }
-
-  Future<void> getMatchs() async {
-    http.Response response = await http.get('http://10.0.2.2:3000/matchs');
-    final data = json.decode(response.body);
-
-    debugPrint(data);
   }
 
   void startList() {
