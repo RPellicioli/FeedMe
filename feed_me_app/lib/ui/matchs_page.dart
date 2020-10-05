@@ -41,7 +41,7 @@ class _MatchsPageState extends State<MatchsPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text("FeedMe"),
-          backgroundColor: Colors.deepOrange,
+          backgroundColor: Color.fromARGB(255, 255, 171, 124),
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
@@ -52,8 +52,9 @@ class _MatchsPageState extends State<MatchsPage> {
               child: Row(
                 children: <Widget>[
                   Text("Seus matchs",
-                      style:
-                          TextStyle(fontSize: 18.0, color: Colors.deepPurple))
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: Color.fromARGB(255, 153, 77, 156)))
                 ],
               ),
             ),
@@ -73,7 +74,7 @@ class _MatchsPageState extends State<MatchsPage> {
     return Dismissible(
       key: Key(_matchs[index]["id"]),
       background: Container(
-        color: Colors.red,
+        color: Color.fromARGB(255, 252, 78, 78),
         child: Align(
           alignment: Alignment(-0.9, 0.0),
           child: Icon(
