@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:feed_me_app/models/user_match.dart';
 import 'package:feed_me_app/services/users_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -8,39 +11,33 @@ class MatchsPage extends StatefulWidget {
 }
 
 class _MatchsPageState extends State<MatchsPage> {
-  List _matchs = [];
+  List<UserMatch> _matchs = [];
+
+  UserMatch _lastRemoved;
+  int _lastRemovedPos;
 
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      getMatchs().then((value) => debugPrint(value.toString()));
-      startList();
+      getMatchs().then((data) => _matchs = data);
     });
   }
 
-  void startList() {
-    _matchs.add({"id": 0, "title": "Vatapá", "image": ""});
-    _matchs.add({"id": 1, "title": "Bacon", "image": ""});
-    _matchs.add({"id": 2, "title": "Camarão", "image": ""});
-  }
-
-  Future<Null> _refresh() async {
+  Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
 
-    setState(() {
-      startList();
+    setState(() async {
+      getMatchs().then((data) => _matchs = data);
     });
-
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("FeedMe"),
+          title: Text("FeedMe", style: TextStyle(color: Colors.white)),
           backgroundColor: Color.fromARGB(255, 255, 171, 124),
           centerTitle: true,
         ),
@@ -72,7 +69,7 @@ class _MatchsPageState extends State<MatchsPage> {
 
   Widget buildItem(BuildContext context, int index) {
     return Dismissible(
-      key: Key(_matchs[index]["id"]),
+      key: Key(_matchs[index].id.toString()),
       background: Container(
         color: Color.fromARGB(255, 252, 78, 78),
         child: Align(
@@ -87,14 +84,30 @@ class _MatchsPageState extends State<MatchsPage> {
       child: ListTile(
         leading: CircleAvatar(
           radius: 30.0,
-          backgroundImage: NetworkImage(_matchs[index]["image"]),
+          backgroundImage: NetworkImage(_matchs[index].image),
           backgroundColor: Colors.transparent,
         ),
-        title: Text(_matchs[index]["title"]),
+        title: Text(_matchs[index].name),
       ),
       onDismissed: (direction) {
         setState(() {
+          _lastRemoved = _matchs[index];
+          _lastRemovedPos = index;
           _matchs.removeAt(index);
+
+          final snack = SnackBar(
+            content: Text("Match com \"${_lastRemoved.name}\" removido!"),
+            action: SnackBarAction(label: "Desfazer",
+                onPressed: () {
+                  setState(() {
+                    //Inserir de volta aqui Bergsoon
+                  });
+                }),
+            duration: Duration(seconds: 5),
+          );
+
+          Scaffold.of(context).removeCurrentSnackBar();
+          Scaffold.of(context).showSnackBar(snack);
         });
       },
     );

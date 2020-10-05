@@ -1,28 +1,21 @@
 final String table = "match";
 final String idColumn = "id";
-final String userIdColumn = "userId";
-final String foodIdColumn = "foodId";
+final String nameColumn = "name";
+final String imageColumn = "image";
 
 class UserMatch {
   int id;
-  int userId;
-  int foodId;
+  String name;
+  String image;
 
-  UserMatch();
+  UserMatch(this.id, this.name, this.image);
 
-  UserMatch.fromMap(Map map) {
-    id = map[idColumn];
-    userId = map[userIdColumn];
-    foodId = map[foodIdColumn];
+  factory UserMatch.fromJson(dynamic json) {
+    return UserMatch(json[idColumn] as int, json[nameColumn] as String, json[imageColumn] as String);
   }
 
-  Map toMap() {
-    Map<String, dynamic> map = {userIdColumn: userId, foodIdColumn: foodId};
-
-    if (id != null) {
-      map[idColumn] = id;
-    }
-
-    return map;
+  @override
+  String toString() {
+    return '{ ${this.name}, ${this.image} }';
   }
 }
