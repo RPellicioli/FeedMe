@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("FeedMe"),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.deepOrange,
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
