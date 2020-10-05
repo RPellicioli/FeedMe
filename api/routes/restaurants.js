@@ -50,9 +50,9 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const created = dateUtils.getCurrentDate();
-    const query = 'INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `longitude`, `latitude`, `cityId`, `stateId`, `created`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `longitude`, `latitude`, `city`, `state`, `created`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    connection.query(query, [post.userId, post.name, post.cnpj, post.cep, post.number, post.street, post.complement, post.neighborhood, post.longitude, post.latitude, post.cityId, post.stateId, created], (error, rows, fields) => {
+    connection.query(query, [post.userId, post.name, post.cnpj, post.cep, post.number, post.street, post.complement, post.neighborhood, post.longitude, post.latitude, post.city, post.state, created], (error, rows, fields) => {
         if (!error) {
             console.log(rows);
             res.status(201).send({ id: rows.insertId });
@@ -116,9 +116,9 @@ router.post('/:restaurantId/schedule', authService.verifyToken, (req, res, next)
 router.put('/:id', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const updated = dateUtils.getCurrentDate();
-    const query = 'UPDATE restaurant SET `name` = ?, `cnpj` = ?, `cep` = ?, `number` = ?, `street` = ?, `complement` = ?, `neighborhood` = ?, `longitude` = ?, `latitude` = ?, `cityId` = ?, `stateId` = ?, `updated` = ? WHERE id = ?';
+    const query = 'UPDATE restaurant SET `name` = ?, `cnpj` = ?, `cep` = ?, `number` = ?, `street` = ?, `complement` = ?, `neighborhood` = ?, `longitude` = ?, `latitude` = ?, `city` = ?, `state` = ?, `updated` = ? WHERE id = ?';
 
-    connection.query(query, [post.name, post.cnpj, post.cep, post.number, post.street, post.complement, post.neighborhood, post.longitude, post.latitude, post.cityId, post.stateId, updated, req.params.id], (error, rows, fields) => {
+    connection.query(query, [post.name, post.cnpj, post.cep, post.number, post.street, post.complement, post.neighborhood, post.longitude, post.latitude, post.city, post.state, updated, req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }
