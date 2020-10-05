@@ -1,5 +1,3 @@
-import 'dart:async';
-
 final String table = "schedule";
 final String idColumn = "id";
 final String restaurantIdColumn = "restaurantId";
