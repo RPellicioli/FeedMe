@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:feed_me_app/models/restaurant.dart';
 import 'package:feed_me_app/models/user_match.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,4 +16,12 @@ Future<UserMatch> getMatchs() async {
   final responseJson = jsonDecode(response.body);
 
   return UserMatch.fromMap(responseJson);
+}
+
+Future<Restaurant> getRestaurant() async {
+  final response = await http.get(baseUrl + "/1/restaurant",
+      headers: {HttpHeaders.authorizationHeader: token});
+  final responseJson = jsonDecode(response.body);
+
+  return Restaurant.fromMap(responseJson);
 }

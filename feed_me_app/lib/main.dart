@@ -1,9 +1,10 @@
 import 'package:feed_me_app/ui/home_page.dart';
+import 'package:feed_me_app/ui/matchs_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
-      home: HomePage(),
+      home: MatchsPage(),
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
         primaryColor: Color.fromARGB(255, 255, 171, 124),
