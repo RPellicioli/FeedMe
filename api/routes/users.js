@@ -20,7 +20,7 @@ router.get('/:id', authService.verifyToken, (req, res, next) => {
 
 //Get matchs by userId
 router.get('/:id/matchs', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT m.id, f.name, f.image FROM `match` AS m LEFT JOIN food AS f ON f.id = m.foodId WHERE userId = ?', [req.params.id], (error, rows, fields) => {
+    connection.query('SELECT m.id, m.foodId, f.name, f.image FROM `match` AS m LEFT JOIN food AS f ON f.id = m.foodId WHERE userId = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send(rows);
         }

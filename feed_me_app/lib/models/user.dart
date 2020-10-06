@@ -12,14 +12,15 @@ class User {
   String password;
   int admin;
 
-  User();
+  User(this.id, this.name, this.email, this.password, this.admin);
 
-  User.fromMap(Map map) {
-    id = map[idColumn];
-    name = map[nameColumn];
-    email = map[emailColumn];
-    password = map[passwordColumn];
-    admin = map[adminColumn];
+  factory User.fromJson(dynamic json) {
+    return User(
+        json[idColumn] as int,
+        json[nameColumn] as String,
+        json[emailColumn] as String,
+        json[passwordColumn] as String,
+        json[adminColumn] as int);
   }
 
   Map toMap() {

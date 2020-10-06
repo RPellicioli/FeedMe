@@ -28,22 +28,36 @@ class Restaurant {
   double longitude;
   double latitude;
 
-  Restaurant();
+  Restaurant(
+      this.id,
+      this.userId,
+      this.name,
+      this.cnpj,
+      this.cep,
+      this.number,
+      this.street,
+      this.complement,
+      this.neighborhood,
+      this.city,
+      this.state,
+      this.longitude,
+      this.latitude);
 
-  Restaurant.fromMap(Map map) {
-    id = map[idColumn];
-    userId = map[userIdColumn];
-    name = map[nameColumn];
-    cnpj = map[cnpjColumn];
-    cep = map[cepColumn];
-    number = map[numberColumn];
-    street = map[streetColumn];
-    complement = map[complementColumn];
-    neighborhood = map[neighborhoodColumn];
-    city = map[cityColumn];
-    state = map[stateColumn];
-    longitude = map[longitudeColumn];
-    latitude = map[latitudeColumn];
+  factory Restaurant.fromJson(dynamic json) {
+    return Restaurant(
+        json[idColumn] as int,
+        json[userIdColumn] as int,
+        json[nameColumn] as String,
+        json[cnpjColumn] as int,
+        json[cepColumn] as int,
+        json[numberColumn] as int,
+        json[streetColumn] as String,
+        json[streetColumn] as String,
+        json[complementColumn] as String,
+        json[cityColumn] as String,
+        json[stateColumn] as String,
+        json[longitudeColumn] as double,
+        json[latitudeColumn] as double);
   }
 
   Map toMap() {

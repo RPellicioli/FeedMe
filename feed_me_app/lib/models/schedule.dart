@@ -12,14 +12,16 @@ class Schedule {
   int initialHour;
   int finalHour;
 
-  Schedule();
+  Schedule(
+      this.id, this.restaurantId, this.day, this.initialHour, this.finalHour);
 
-  Schedule.fromMap(Map map) {
-    id = map[idColumn];
-    restaurantId = map[restaurantIdColumn];
-    day = map[dayColumn];
-    initialHour = map[initialHourColumn];
-    finalHour = map[finalHourColumn];
+  factory Schedule.fromJson(dynamic json) {
+    return Schedule(
+        json[idColumn] as int,
+        json[restaurantIdColumn] as int,
+        json[dayColumn] as int,
+        json[initialHourColumn] as int,
+        json[finalHourColumn] as int);
   }
 
   Map toMap() {

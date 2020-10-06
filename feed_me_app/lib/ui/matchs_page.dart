@@ -1,9 +1,10 @@
-import 'dart:convert';
-
 import 'package:feed_me_app/models/user_match.dart';
 import 'package:feed_me_app/services/users_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import '../services/matchs_service.dart';
+import '../services/users_service.dart';
 
 class MatchsPage extends StatefulWidget {
   @override
@@ -14,7 +15,6 @@ class _MatchsPageState extends State<MatchsPage> {
   List<UserMatch> _matchs = [];
 
   UserMatch _lastRemoved;
-  int _lastRemovedPos;
 
   @override
   void initState() {
@@ -26,8 +26,6 @@ class _MatchsPageState extends State<MatchsPage> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 1));
-
     setState(() {
       getMatchs().then((data) => _matchs = data);
     });
@@ -45,7 +43,7 @@ class _MatchsPageState extends State<MatchsPage> {
         body: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
               child: Row(
                 children: <Widget>[
                   Text("Seus matchs",
@@ -59,7 +57,7 @@ class _MatchsPageState extends State<MatchsPage> {
               child: RefreshIndicator(
                   onRefresh: _refresh,
                   child: ListView.builder(
-                      padding: EdgeInsets.only(top: 6.0),
+                      padding: EdgeInsets.fromLTRB(0.0, 20.0, 20.0, 20.0),
                       itemCount: _matchs.length,
                       itemBuilder: buildItem)),
             )
@@ -82,6 +80,7 @@ class _MatchsPageState extends State<MatchsPage> {
       ),
       direction: DismissDirection.startToEnd,
       child: ListTile(
+        contentPadding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
         leading: CircleAvatar(
           radius: 30.0,
           backgroundImage: NetworkImage(_matchs[index].image),
@@ -92,15 +91,18 @@ class _MatchsPageState extends State<MatchsPage> {
       onDismissed: (direction) {
         setState(() {
           _lastRemoved = _matchs[index];
-          _lastRemovedPos = index;
+
           _matchs.removeAt(index);
+          deleteMatch(_matchs[index].id);
 
           final snack = SnackBar(
             content: Text("Match com \"${_lastRemoved.name}\" removido!"),
-            action: SnackBarAction(label: "Desfazer",
+            action: SnackBarAction(
+                label: "Desfazer",
                 onPressed: () {
                   setState(() {
-                    //Inserir de volta aqui Bergsoon
+                    postMatch(_matchs[index]).then(
+                        (id) => {getMatchs().then((data) => _matchs = data)});
                   });
                 }),
             duration: Duration(seconds: 5),

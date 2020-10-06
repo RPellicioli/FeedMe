@@ -14,15 +14,17 @@ class Food {
   String description;
   int active;
 
-  Food();
+  Food(this.id, this.restaurantId, this.image, this.price, this.description,
+      this.active);
 
-  Food.fromMap(Map map) {
-    id = map[idColumn];
-    restaurantId = map[restaurantIdColumn];
-    image = map[imageColumn];
-    price = map[priceColumn];
-    description = map[descriptionColumn];
-    active = map[activeColumn];
+  factory Food.fromJson(dynamic json) {
+    return Food(
+        json[idColumn] as int,
+        json[restaurantIdColumn] as int,
+        json[imageColumn] as String,
+        json[priceColumn] as double,
+        json[descriptionColumn] as String,
+        json[activeColumn] as int);
   }
 
   Map toMap() {
