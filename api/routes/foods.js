@@ -23,17 +23,36 @@ const bucket = storage.bucket('feedme-app');
 
 //Get food different listId
 router.get('/random', authService.verifyToken, (req, res, next) => {
+    const km = 200;
+    const lat = Number(req.query.lat);
+    const lon = Number(req.query.lon);
+    
+    // r = D/R = (km/6371km 'tamanho da terra' ) = rad
+    let rad = km/6371;
+    let latmin = lat - rad;
+    let latmax = lat + rad;
+
+    let Δlon = Math.asin(Math.sin(rad) / Math.cos(lat));
+    let lonmin = lon + Δlon;
+    let lonmax = lon - Δlon;
+
     let listIds = [];
-    let query = 'SELECT * FROM food WHERE active = 1';
+    let query = 'SELECT f.name, f.image FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ?';
 
     if(req.query.listIds){
         listIds = JSON.parse(req.query.listIds);
-        query = 'SELECT * FROM food WHERE active = 1 AND id NOT IN (?)';
+        query = 'SELECT f.name, f.image FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ? AND f.id NOT IN (?)';
     }
 
-    connection.query(query, [listIds], (error, rows, fields) => {
+    connection.query(query, [latmin, latmax, lonmin, lonmax, listIds], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            let food = { };
+
+            if(rows && rows.length > 0){
+                food = rows[Math.floor(Math.random() * rows.length)];
+            }
+
+            res.status(200).send(food);
         }
         else {
             console.log(error);

@@ -26,8 +26,8 @@ CREATE TABLE `restaurant` (
   `street` varchar(255) NOT NULL,
   `complement` varchar(255) NOT NULL,
   `neighborhood` varchar(255) NOT NULL,
-  `longitude` float(10,6) NOT NULL,
   `latitude` float(10,6) NOT NULL,
+  `longitude` float(10,6) NOT NULL,
   `city` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,15 +77,27 @@ INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
 
 INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
        VALUES ('Teste', 'teste@teste.com', 'teste', 0, CURRENT_TIME(), CURRENT_TIME());
-   
-INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `longitude`, `latitude`, `city`, `state`, `created`, `updated`)
-       VALUES (1, 'Di paollo', 032526552000102, 95110022, 11, 'Luiz Cavion', 'Casa', 'Desvio Rizzo', -29.1957253, -51.2361348, 'Caxias do Sul', 'RS', CURRENT_TIME(), CURRENT_TIME());    
 
-INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
-       VALUES (1, 'Vatapá', 'https://cdn.panelinha.com.br/receita/1399345200000-Vatapa-baiano.jpg', 13.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
+INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
+       VALUES ('Mafacioli', 'mafacioli@teste.com', 'teste', 1, CURRENT_TIME(), CURRENT_TIME());
+
+INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
+       VALUES ('Pernambuco', 'pernambuco@teste.com', 'teste', 1, CURRENT_TIME(), CURRENT_TIME());
+   
+INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `latitude`, `longitude`, `city`, `state`, `created`, `updated`)
+       VALUES (1, 'Di paollo', 032526552000102, 95110022, 11, 'Luiz Cavion', 'Casa', 'Desvio Rizzo', -29.1957253, -51.2361348, 'Caxias do Sul', 'RS', CURRENT_TIME(), CURRENT_TIME());   
+
+INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `latitude`, `longitude`, `city`, `state`, `created`, `updated`)
+       VALUES (3, 'Mafacioli', 032526552000102, 95110160, 515, 'Bom Princípio', 'Casa', 'Desvio Rizzo', -29.1975933, -51.2409512, 'Caxias do Sul', 'RS', CURRENT_TIME(), CURRENT_TIME()); 
+
+INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `complement`, `neighborhood`, `latitude`, `longitude`, `city`, `state`, `created`, `updated`)
+       VALUES (4, 'Pernambuco', 032526552000102, 95110160, 515, 'Bom Princípio', 'Casa', 'Desvio Rizzo', -8.0848541, -34.9157048, 'Caxias do Sul', 'RS', CURRENT_TIME(), CURRENT_TIME()); 
 
 INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
        VALUES (1, 'Camarão à milanesa', 'https://img-global.cpcdn.com/recipes/dcfc63b78d267dbf/751x532cq70/foto-principal-da-receita-camarao-a-milanesa.jpg', 66.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
+
+INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
+       VALUES (1, 'Vatapá', 'https://cdn.panelinha.com.br/receita/1399345200000-Vatapa-baiano.jpg', 66.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
 
 INSERT INTO `match`(`userId`, `foodId`)
        VALUES (2, 1);
