@@ -94,10 +94,19 @@ INSERT INTO restaurant(`userId`, `name`, `cnpj`, `cep`, `number`, `street`, `com
        VALUES (4, 'Pernambuco', 032526552000102, 95110160, 515, 'Bom Princípio', 'Casa', 'Desvio Rizzo', -8.0848541, -34.9157048, 'Caxias do Sul', 'RS', CURRENT_TIME(), CURRENT_TIME()); 
 
 INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
-       VALUES (1, 'Camarão à milanesa', 'https://img-global.cpcdn.com/recipes/dcfc63b78d267dbf/751x532cq70/foto-principal-da-receita-camarao-a-milanesa.jpg', 66.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
+       VALUES (3, 'Camarão à milanesa', 'https://img-global.cpcdn.com/recipes/dcfc63b78d267dbf/751x532cq70/foto-principal-da-receita-camarao-a-milanesa.jpg', 66.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
 
 INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
-       VALUES (1, 'Vatapá', 'https://cdn.panelinha.com.br/receita/1399345200000-Vatapa-baiano.jpg', 66.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
+       VALUES (3, 'Vatapá', 'https://cdn.panelinha.com.br/receita/1399345200000-Vatapa-baiano.jpg', 66.00, 'Prato bem bom feito com camarão', 1, CURRENT_TIME(), CURRENT_TIME());
+
+INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
+       VALUES (2, 'Pizza Nona Itália', 'https://s2.glbimg.com/uBheAzFpL2wQDN89HUgI1fyv-cg=/696x390/smart/filters:cover():strip_icc()/s.glbimg.com/po/rc/media/2012/06/13/15/30/58/110/ppp.jpg', 45.00, 'A melhor pizzaria de caxias do sul oferece pra você.', 1, CURRENT_TIME(), CURRENT_TIME());
+
+INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
+       VALUES (1, 'Massa tomate seco', 'https://i.ytimg.com/vi/ZDEp_wQuZzk/maxresdefault.jpg', 45.00, 'Lorem Ipsum.', 1, CURRENT_TIME(), CURRENT_TIME());
+
+INSERT INTO food(`restaurantId`, `name`, `image`, `price`, `description`, `active`, `created`, `updated`)
+       VALUES (1, 'Massa ao pesto', 'https://www.comidaereceitas.com.br/wp-content/uploads/2019/02/espaguete_abobrinha.jpg', 45.00, 'Lorem Ipsum.', 1, CURRENT_TIME(), CURRENT_TIME());
 
 INSERT INTO `match`(`userId`, `foodId`)
        VALUES (2, 1);
