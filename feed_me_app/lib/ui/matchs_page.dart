@@ -28,7 +28,7 @@ class _MatchsPageState extends State<MatchsPage> {
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
 
-    setState(() async {
+    setState(() {
       getMatchs().then((data) => _matchs = data);
     });
   }
