@@ -32,6 +32,9 @@ class _MatchsPageState extends State<MatchsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _userId = UserModel.of(context).userData.id;
+    getMatchs(_userId).then((data) => _matchs = data);
+
     return Scaffold(
         appBar: AppBar(
           title: Text("FeedMe", style: TextStyle(color: Colors.white)),
@@ -39,36 +42,29 @@ class _MatchsPageState extends State<MatchsPage> {
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
-        body:
-            ScopedModelDescendant<UserModel>(builder: (context, child, model) {
-          _userId = UserModel.of(context).userData.id;
-
-          getMatchs(_userId).then((data) => _matchs = data);
-
-          return Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-                child: Row(
-                  children: <Widget>[
-                    Text("Seus matchs",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: Color.fromARGB(255, 153, 77, 156)))
-                  ],
-                ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+              child: Row(
+                children: <Widget>[
+                  Text("Minhas escolhas",
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: Color.fromARGB(255, 153, 77, 156)))
+                ],
               ),
-              Expanded(
-                child: RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0.0, 20.0, 20.0, 20.0),
-                        itemCount: _matchs.length,
-                        itemBuilder: buildItem)),
-              )
-            ],
-          );
-        }));
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: ListView.builder(
+                      padding: EdgeInsets.fromLTRB(0.0, 20.0, 20.0, 20.0),
+                      itemCount: _matchs.length,
+                      itemBuilder: buildItem)),
+            )
+          ],
+        ));
   }
 
   Widget buildItem(BuildContext context, int index) {
