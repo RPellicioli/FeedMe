@@ -5,13 +5,15 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'models/user_model.dart';
 
-void main() => runApp(new MyApp());
+Future<void> main() async {
+  await login('pellicioli_r@hotmail.com', '12345');
+
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    login('pellicioli_r@hotmail.com', '12345');
-
     return ScopedModel<UserModel>(
       model: UserModel(),
       child: ScopedModelDescendant<UserModel>(builder: (context, child, model) {
