@@ -10,8 +10,16 @@ import 'global_service.dart';
 final String pathUrl = "foods";
 
 Future<Food> getRandomFood(double lat, double lon, List<int> listIds) async {
+  String listParams = "";
+  listIds.forEach((id) {
+    listParams += "?listIds=" + id.toString();
+  });
+
   final response = await http.get(
-      baseUrl + pathUrl + "?lat=${lat.toString()}&lon=${lon.toString()}",
+      baseUrl +
+          pathUrl +
+          "?lat=${lat.toString()}&lon=${lon.toString()}" +
+          listParams,
       headers: {HttpHeaders.authorizationHeader: token});
   final responseJson = jsonDecode(response.body);
 
