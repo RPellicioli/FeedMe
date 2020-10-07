@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:feed_me_app/entities/user_match.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/user_match.dart';
 import 'global_service.dart';
 
 final String pathUrl = "matchs";
@@ -14,7 +14,7 @@ Future<void> deleteMatch(int id) async {
       headers: {HttpHeaders.authorizationHeader: token});
 }
 
-Future<int> postMatch(UserMatch userMatch) async {
+Future<int> postMatch(int userId, UserMatch userMatch) async {
   final response = await http.post(baseUrl + pathUrl,
       headers: {HttpHeaders.authorizationHeader: token},
       body: jsonEncode(

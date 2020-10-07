@@ -1,15 +1,30 @@
-import 'package:feed_me_app/ui/home_page.dart';
+import 'package:feed_me_app/services/login_service.dart';
 import 'package:feed_me_app/ui/matchs_page.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-void main() {
-  runApp(MaterialApp(
-      home: MatchsPage(),
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        primaryColor: Color.fromARGB(255, 255, 171, 124),
-      ),
-      debugShowCheckedModeBanner: false));
+import 'models/user_model.dart';
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    login('pellicioli_r@hotmail.com', '12345');
+
+    return ScopedModel<UserModel>(
+      model: UserModel(),
+      child: ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+        return MaterialApp(
+            title: "FeedMe",
+            theme: ThemeData(
+                primarySwatch: Colors.deepOrange[300],
+                primaryColor: Color.fromARGB(255, 255, 171, 124)),
+            debugShowCheckedModeBanner: false,
+            home: MatchsPage());
+      }),
+    );
+  }
 }
 
 //orange Color.fromARGB(255, 255, 171, 124);

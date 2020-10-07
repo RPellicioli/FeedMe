@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:feed_me_app/entities/restaurant.dart';
+import 'package:feed_me_app/entities/schedule.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/restaurant.dart';
-import '../models/schedule.dart';
 import 'global_service.dart';
 
 final String pathUrl = "restaurants";

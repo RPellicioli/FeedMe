@@ -2,14 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:feed_me_app/models/food.dart';
+import 'package:feed_me_app/entities/food.dart';
 import 'package:http/http.dart' as http;
 
 import 'global_service.dart';
 
 final String pathUrl = "foods";
 
-Future<Food> getRandomFood(double lat, double lon, List<int> listIds) async {
+Future<Food> getRandomFood(
+    token, double lat, double lon, List<int> listIds) async {
   String listParams = "";
   listIds.forEach((id) {
     listParams += "?listIds=" + id.toString();
