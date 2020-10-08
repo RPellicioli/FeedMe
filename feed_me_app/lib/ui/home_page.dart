@@ -1,26 +1,26 @@
+import 'package:feed_me_app/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+import 'find_page.dart';
 
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class HomePage extends StatelessWidget {
+  final _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("FeedMe", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.deepOrange,
-        centerTitle: true,
-      ),
-      backgroundColor: Colors.white,
-      body: Container(),
+    return PageView(
+      controller: _pageController,
+      physics: NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        Scaffold(
+            appBar: AppBar(
+              title: Text("FeedMe"),
+              backgroundColor: Color.fromARGB(255, 255, 171, 124),
+              centerTitle: true,
+            ),
+            body: FindPage(),
+            drawer: CustomDrawer(_pageController)),
+      ],
     );
   }
 }
