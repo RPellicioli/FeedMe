@@ -8,7 +8,7 @@ const dateUtils = require('../utils/date-utils');
 router.get('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            res.status(200).send(rows[0]);
         }
         else {
             console.log(error);
