@@ -52,7 +52,7 @@ class UserModel extends Model {
     notifyListeners();
 
     login(email, password).then((data) async {
-      await _loadCurrentUser(data["userId"]);
+      await _loadCurrentUser(data["userId"], data["token"]);
 
       token = data["token"];
 
@@ -78,8 +78,8 @@ class UserModel extends Model {
     return loggedId;
   }
 
-  Future<Null> _loadCurrentUser(int userId) async {
-    userData = await getUser(userId);
+  Future<Null> _loadCurrentUser(int userId, String a) async {
+    userData = await getUser(userId, a);
     notifyListeners();
   }
 }

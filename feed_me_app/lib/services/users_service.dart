@@ -11,9 +11,9 @@ import 'global_service.dart';
 
 final String pathUrl = "users";
 
-Future<User> getUser(int id) async {
+Future<User> getUser(int id, String userToken) async {
   final response = await http.get(baseUrl + pathUrl + "/${id.toString()}",
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: "Bearer " + userToken});
   final responseJson = jsonDecode(response.body);
 
   return User.fromJson(responseJson);
@@ -23,7 +23,7 @@ Future<List<UserMatch>> getMatchs(int userId) async {
   try {
     final response = await http.get(
         baseUrl + pathUrl + "/${userId.toString()}/matchs",
-        headers: {HttpHeaders.authorizationHeader: token});
+        headers: {HttpHeaders.authorizationHeader: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiUmljYXJkbyBQZWxsaWNpb2xpIiwiZW1haWwiOiJwZWxsaWNpb2xpX3JAaG90bWFpbC5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiYWRtaW4iOjEsImNyZWF0ZWQiOiIyMDIwLTEwLTA1VDIzOjAzOjAwLjAwMFoiLCJ1cGRhdGVkIjoiMjAyMC0xMC0wNVQyMzowMzowMC4wMDBaIn0sImlhdCI6MTYwMjExODQ1NX0.zUBA8dQzYNGKfSnuWBZIk_8KSfDaE-ArvuY__w2YslU"});
     final responseJson = jsonDecode(response.body);
 
     return (responseJson as List).map((i) {

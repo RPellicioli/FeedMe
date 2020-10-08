@@ -1,13 +1,10 @@
-import 'package:feed_me_app/services/login_service.dart';
-import 'package:feed_me_app/ui/matchs_page.dart';
+import 'package:feed_me_app/pages/matchs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'models/user_model.dart';
 
-Future<void> main() async {
-  await login('pellicioli_r@hotmail.com', '12345');
-
+void main() {
   runApp(new MyApp());
 }
 
@@ -20,7 +17,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
             title: "FeedMe",
             theme: ThemeData(
-                primarySwatch: Colors.deepOrange[300],
+                primarySwatch: Colors.deepOrange,
                 primaryColor: Color.fromARGB(255, 255, 171, 124)),
             debugShowCheckedModeBanner: false,
             home: MatchsPage());

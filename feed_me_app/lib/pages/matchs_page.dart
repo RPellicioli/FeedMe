@@ -2,7 +2,6 @@ import 'package:feed_me_app/entities/user_match.dart';
 import 'package:feed_me_app/models/user_model.dart';
 import 'package:feed_me_app/services/users_service.dart';
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'dart:async';
 
 import '../services/matchs_service.dart';
@@ -32,8 +31,13 @@ class _MatchsPageState extends State<MatchsPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel.of(context).signIn(email: 'pellicioli_r@hotmail.com', password: '12345', onSuccess: () {}, onFail: () {});
+
     _userId = UserModel.of(context).userData.id;
-    getMatchs(_userId).then((data) => _matchs = data);
+
+    getMatchs(_userId).then((data) {
+      _matchs = data;
+    });
 
     return Scaffold(
         appBar: AppBar(
@@ -45,12 +49,12 @@ class _MatchsPageState extends State<MatchsPage> {
         body: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+              padding: EdgeInsets.fromLTRB(20.0, 20.0, 5.0, 20.0),
               child: Row(
                 children: <Widget>[
                   Text("Minhas escolhas",
                       style: TextStyle(
-                          fontSize: 18.0,
+                          fontSize: 24.0,
                           color: Color.fromARGB(255, 153, 77, 156)))
                 ],
               ),
@@ -58,16 +62,27 @@ class _MatchsPageState extends State<MatchsPage> {
             Expanded(
               child: RefreshIndicator(
                   onRefresh: _refresh,
-                  child: ListView.builder(
-                      padding: EdgeInsets.fromLTRB(0.0, 20.0, 20.0, 20.0),
+                  child: ListView.separated(
+                      padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
                       itemCount: _matchs.length,
-                      itemBuilder: buildItem)),
+                      itemBuilder: buildItem,
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          color: Color.fromARGB(255, 220, 220, 220),
+                          height: 1,
+                          thickness: 1,
+                          indent: 20,
+                          endIndent: 20,
+                        ); 
+                      }
+                  )
+                ),
             )
           ],
         ));
   }
 
-  Widget buildItem(BuildContext context, int index) {
+  Widget buildItem(BuildContext context, int index) {              
     return Dismissible(
       key: Key(_matchs[index].id.toString()),
       background: Container(
@@ -82,7 +97,7 @@ class _MatchsPageState extends State<MatchsPage> {
       ),
       direction: DismissDirection.startToEnd,
       child: ListTile(
-        contentPadding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
         leading: CircleAvatar(
           radius: 30.0,
           backgroundImage: NetworkImage(_matchs[index].image),
