@@ -18,7 +18,6 @@ class _MatchsPageState extends State<MatchsPage> {
   int _userId;
   String _token;
   UserMatch _lastRemoved;
-  bool _firstLoading = true;
 
   @override
   void initState() {
@@ -27,24 +26,14 @@ class _MatchsPageState extends State<MatchsPage> {
 
   Future<void> _refresh() async {
     setState(() {
-      getMatchs(_userId, _token).then((data) => _matchs = data);
+      getMatchs(_userId, _token).then((data) {
+        _matchs = data;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    UserModel.of(context).signIn(email: 'pellicioli_r@hotmail.com', password: '12345', onSuccess: () {}, onFail: () {});
-
-    _userId = UserModel.of(context).userData.id;
-    _token = UserModel.of(context).userToken;
-
-    getMatchs(_userId, _token).then((data) {
-      if(_firstLoading){
-        _matchs = data;
-        _firstLoading = false;
-      }
-    });
-
     return Scaffold(
         appBar: AppBar(
           title: Text("FeedMe", style: TextStyle(color: Colors.white)),
@@ -52,45 +41,70 @@ class _MatchsPageState extends State<MatchsPage> {
           centerTitle: true,
         ),
         backgroundColor: Colors.white,
-        body: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(20.0, 20.0, 5.0, 20.0),
-              child: Row(
-                children: <Widget>[
-                  Text("Minhas escolhas",
-                      style: TextStyle(
-                          fontSize: 24.0,
-                          color: Color.fromARGB(255, 153, 77, 156)))
-                ],
-              ),
-            ),
-            Expanded(
-              child: RefreshIndicator(
-                  onRefresh: _refresh,
-                  child: ListView.separated(
-                      padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
-                      itemCount: _matchs.length,
-                      itemBuilder: buildItem,
-                      separatorBuilder: (context, index) {
-                        return Divider(
-                          color: Color.fromARGB(255, 220, 220, 220),
-                          height: 1,
-                          thickness: 1,
-                          indent: 20,
-                          endIndent: 20,
-                        ); 
-                      }
-                  )
-                ),
-            )
-          ],
-        ));
+        body: buildContainer());
   }
 
-  Widget buildItem(BuildContext context, int index) {              
+  Widget buildList() {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.fromLTRB(20.0, 20.0, 5.0, 20.0),
+          child: Row(
+            children: <Widget>[
+              Text("Minhas escolhas",
+                  style: TextStyle(
+                      fontSize: 24.0,
+                      color: Color.fromARGB(255, 153, 77, 156)))
+            ],
+          ),
+        ),
+        Expanded(
+          child: RefreshIndicator(
+              onRefresh: _refresh,
+              child: ListView.separated(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
+                  itemCount: _matchs.length,
+                  itemBuilder: buildItem,
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      color: Color.fromARGB(255, 220, 220, 220),
+                      height: 1,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    );
+                  }
+              )
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget buildContainer() {
+    UserModel.of(context).signIn(email: 'pellicioli_r@hotmail.com', password: '12345', onSuccess: () {}, onFail: () {});
+
+    _userId = UserModel.of(context).userData.id;
+    _token = UserModel.of(context).userToken;
+
+    return Container(
+        child: FutureBuilder(
+            future: getMatchs(_userId, _token),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _matchs = snapshot.data;
+                return buildList();
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }));
+  }
+
+  Widget buildItem(BuildContext context, int index) {
     return Dismissible(
-      key: Key(_matchs[index].id.toString()),
+      key: Key(index.toString()),
       background: Container(
         color: Color.fromARGB(255, 252, 78, 78),
         child: Align(
