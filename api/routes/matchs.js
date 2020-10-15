@@ -21,7 +21,7 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 router.post('/', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const query = 'INSERT INTO `match`(`userId`, `foodId`) VALUES (?, ?)';
-
+    
     connection.query(query, [post.userId, post.foodId], (error, rows, fields) => {
         if (!error) {
             res.status(201).send({ id: rows.insertId });

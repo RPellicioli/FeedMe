@@ -19,11 +19,11 @@ Future<User> getUser(int id, String userToken) async {
   return User.fromJson(responseJson);
 }
 
-Future<List<UserMatch>> getMatchs(int userId) async {
+Future<List<UserMatch>> getMatchs(int userId, String token) async {
   try {
     final response = await http.get(
         baseUrl + pathUrl + "/${userId.toString()}/matchs",
-        headers: {HttpHeaders.authorizationHeader: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiUmljYXJkbyBQZWxsaWNpb2xpIiwiZW1haWwiOiJwZWxsaWNpb2xpX3JAaG90bWFpbC5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiYWRtaW4iOjEsImNyZWF0ZWQiOiIyMDIwLTEwLTA1VDIzOjAzOjAwLjAwMFoiLCJ1cGRhdGVkIjoiMjAyMC0xMC0wNVQyMzowMzowMC4wMDBaIn0sImlhdCI6MTYwMjExODQ1NX0.zUBA8dQzYNGKfSnuWBZIk_8KSfDaE-ArvuY__w2YslU"});
+        headers: {HttpHeaders.authorizationHeader: "Bearer " + token});
     final responseJson = jsonDecode(response.body);
 
     return (responseJson as List).map((i) {
@@ -35,23 +35,22 @@ Future<List<UserMatch>> getMatchs(int userId) async {
   }
 }
 
-Future<Restaurant> getRestaurant(int userId) async {
+Future<Restaurant> getRestaurant(int userId, String token) async {
   final response = await http.get(
       baseUrl + pathUrl + "/${userId.toString()}/restaurant",
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
   final responseJson = jsonDecode(response.body);
 
   return Restaurant.fromJson(responseJson);
 }
 
-Future<void> deleteAllMatchs(int userId) async {
+Future<void> deleteAllMatchs(int userId, String token) async {
   await http.delete(baseUrl + pathUrl + "/${userId.toString()}/matchs",
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
 }
 
 Future<int> postUser(User user) async {
   final response = await http.post(baseUrl + pathUrl,
-      headers: {HttpHeaders.authorizationHeader: token},
       body: jsonEncode(user));
 
   final responseJson = jsonDecode(response.body);
@@ -59,9 +58,9 @@ Future<int> postUser(User user) async {
   return responseJson['id'];
 }
 
-Future<String> updateUser(int userId, User user) async {
+Future<String> updateUser(int userId, User user, String token) async {
   final response = await http.put(baseUrl + pathUrl + "/${userId.toString()}",
-      headers: {HttpHeaders.authorizationHeader: token},
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
       body: jsonEncode(user));
 
   return response.body;

@@ -9,16 +9,15 @@ import 'global_service.dart';
 
 final String pathUrl = "matchs";
 
-Future<void> deleteMatch(int id) async {
+Future<void> deleteMatch(int id, String token) async {
   await http.delete(baseUrl + pathUrl + "/${id.toString()}",
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
 }
 
-Future<int> postMatch(int userId, UserMatch userMatch) async {
+Future<int> postMatch(int userId, UserMatch userMatch, String token) async {
   final response = await http.post(baseUrl + pathUrl,
-      headers: {HttpHeaders.authorizationHeader: token},
-      body: jsonEncode(
-          <String, dynamic>{'userId': userId, 'foodId': userMatch.foodId}));
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
+      body: {'userId': userId.toString(), 'foodId': userMatch.foodId.toString()});
 
   final responseJson = jsonDecode(response.body);
 

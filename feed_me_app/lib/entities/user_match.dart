@@ -10,10 +10,10 @@ class UserMatch {
   String name;
   String image;
 
-  UserMatch(this.id, this.name, this.image);
+  UserMatch(this.id, this.foodId, this.name, this.image);
 
   factory UserMatch.fromJson(dynamic json) {
-    return UserMatch(json[idColumn] as int, json[nameColumn] as String,
+    return UserMatch(json[idColumn] as int, json[foodIdColumn] as int, json[nameColumn] as String,
         json[imageColumn] as String);
   }
 

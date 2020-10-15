@@ -16,7 +16,9 @@ class _MatchsPageState extends State<MatchsPage> {
   List<UserMatch> _matchs = [];
 
   int _userId;
+  String _token;
   UserMatch _lastRemoved;
+  bool _firstLoading = true;
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _MatchsPageState extends State<MatchsPage> {
 
   Future<void> _refresh() async {
     setState(() {
-      getMatchs(_userId).then((data) => _matchs = data);
+      getMatchs(_userId, _token).then((data) => _matchs = data);
     });
   }
 
@@ -34,9 +36,13 @@ class _MatchsPageState extends State<MatchsPage> {
     UserModel.of(context).signIn(email: 'pellicioli_r@hotmail.com', password: '12345', onSuccess: () {}, onFail: () {});
 
     _userId = UserModel.of(context).userData.id;
+    _token = UserModel.of(context).userToken;
 
-    getMatchs(_userId).then((data) {
-      _matchs = data;
+    getMatchs(_userId, _token).then((data) {
+      if(_firstLoading){
+        _matchs = data;
+        _firstLoading = false;
+      }
     });
 
     return Scaffold(
@@ -110,7 +116,7 @@ class _MatchsPageState extends State<MatchsPage> {
           _lastRemoved = _matchs[index];
 
           _matchs.removeAt(index);
-          deleteMatch(_matchs[index].id);
+          deleteMatch(_lastRemoved.id, _token);
 
           final snack = SnackBar(
             content: Text("Match com \"${_lastRemoved.name}\" removido!"),
@@ -118,8 +124,8 @@ class _MatchsPageState extends State<MatchsPage> {
                 label: "Desfazer",
                 onPressed: () {
                   setState(() {
-                    postMatch(_userId, _matchs[index]).then((id) =>
-                        {getMatchs(_userId).then((data) => _matchs = data)});
+                    postMatch(_userId, _lastRemoved, _token).then((id) =>
+                        {getMatchs(_userId, _token).then((data) => _matchs = data)});
                   });
                 }),
             duration: Duration(seconds: 5),

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:feed_me_app/entities/user.dart';
-import 'package:feed_me_app/services/global_service.dart';
 import 'package:feed_me_app/services/login_service.dart';
 import 'package:feed_me_app/services/users_service.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -11,6 +10,7 @@ class UserModel extends Model {
   User userData = User();
   bool isLoading = false;
   bool loggedId = false;
+  String userToken;
 
   static UserModel of(BuildContext context) =>
       ScopedModel.of<UserModel>(context);
@@ -54,7 +54,7 @@ class UserModel extends Model {
     login(email, password).then((data) async {
       await _loadCurrentUser(data["userId"], data["token"]);
 
-      token = data["token"];
+      userToken = data["token"];
 
       loggedId = true;
       isLoading = false;
@@ -70,7 +70,7 @@ class UserModel extends Model {
   void signOut() async {
     userData = User();
     loggedId = false;
-    token = "";
+    userToken = "";
     notifyListeners();
   }
 

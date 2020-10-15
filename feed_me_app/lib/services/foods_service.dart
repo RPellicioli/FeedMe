@@ -21,28 +21,28 @@ Future<Food> getRandomFood(
           pathUrl +
           "?lat=${lat.toString()}&lon=${lon.toString()}" +
           listParams,
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
   final responseJson = jsonDecode(response.body);
 
   return Food.fromJson(responseJson);
 }
 
-Future<Food> getFood(int id) async {
+Future<Food> getFood(int id, String token) async {
   final response = await http.get(baseUrl + pathUrl + "/${id.toString()}",
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
   final responseJson = jsonDecode(response.body);
 
   return Food.fromJson(responseJson);
 }
 
-Future<void> deleteMatch(int id) async {
+Future<void> deleteMatch(int id, String token) async {
   await http.delete(baseUrl + pathUrl + "/${id.toString()}",
-      headers: {HttpHeaders.authorizationHeader: token});
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
 }
 
-Future<int> postFood(Food food) async {
+Future<int> postFood(Food food, String token) async {
   final response = await http.post(baseUrl + pathUrl,
-      headers: {HttpHeaders.authorizationHeader: token},
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
       body: jsonEncode(food));
 
   final responseJson = jsonDecode(response.body);
@@ -50,17 +50,17 @@ Future<int> postFood(Food food) async {
   return responseJson['id'];
 }
 
-Future<String> updateFood(int id, Food food) async {
+Future<String> updateFood(int id, Food food, String token) async {
   await http.put(baseUrl + pathUrl + "/${id.toString()}",
-      headers: {HttpHeaders.authorizationHeader: token},
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
       body: jsonEncode(food));
 
   return "Atualizado";
 }
 
-Future<String> uploadImageFood(File file) async {
+Future<String> uploadImageFood(File file, String token) async {
   final response = await http.post(baseUrl + pathUrl + "/upload",
-      headers: {HttpHeaders.authorizationHeader: token},
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
       body: jsonEncode(file));
 
   return response.body;
