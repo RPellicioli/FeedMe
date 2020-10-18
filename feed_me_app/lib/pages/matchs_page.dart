@@ -55,8 +55,8 @@ class _MatchsPageState extends State<MatchsPage> {
     UserModel.of(context).signIn(
         email: 'pellicioli_r@hotmail.com',
         password: '12345',
-        onSuccess: () {},
-        onFail: () {});
+        onSuccess: () { },
+        onFail: () { });
 
     _userId = UserModel.of(context).userData.id;
     _token = UserModel.of(context).userToken;
