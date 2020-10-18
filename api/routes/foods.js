@@ -66,7 +66,7 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
 router.get('/:id', authService.verifyToken, (req, res, next) => {
     connection.query('SELECT * FROM food WHERE id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows);
+            res.status(200).send(rows[0]);
         }
         else {
             console.log(error);
