@@ -1,6 +1,7 @@
 import 'package:feed_me_app/entities/user_match.dart';
 import 'package:feed_me_app/models/user_model.dart';
 import 'package:feed_me_app/services/users_service.dart';
+import 'package:feed_me_app/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -23,12 +24,6 @@ class _MatchsPageState extends State<MatchsPage> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      getMatchs(_userId, _token).then((data) {
-        _matchs = data;
-      });
-    });
   }
 
   Future<void> _refresh() async {
@@ -41,43 +36,26 @@ class _MatchsPageState extends State<MatchsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("FeedMe", style: TextStyle(color: Colors.white)),
-          backgroundColor: Color.fromARGB(255, 255, 171, 124),
-          centerTitle: true,
-        ),
-        backgroundColor: Colors.white,
-        body: buildContainer());
+    return buildContainer();
   }
 
   Widget buildContainer() {
-    UserModel.of(context).signIn(
-        email: 'pellicioli_r@hotmail.com',
-        password: '12345',
-        onSuccess: () { },
-        onFail: () { });
-
     _userId = UserModel.of(context).userData.id;
     _token = UserModel.of(context).userToken;
 
     return Container(
-      child: buildList()
-    );
-
-    // return Container(
-    //     child: FutureBuilder(
-    //         future: getMatchs(_userId, _token),
-    //         builder: (context, snapshot) {
-    //           if (snapshot.hasData) {
-    //             _matchs = snapshot.data;
-    //             return buildList();
-    //           } else {
-    //             return Center(
-    //               child: CircularProgressIndicator(),
-    //             );
-    //           }
-    //         }));
+        child: FutureBuilder(
+            future: getMatchs(_userId, _token),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _matchs = snapshot.data;
+                return buildList();
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }));
   }
 
   Widget buildList() {
@@ -117,8 +95,8 @@ class _MatchsPageState extends State<MatchsPage> {
   Widget buildItem(BuildContext context, int index) {
     return InkWell(
         onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => FoodPage(_matchs[index].foodId)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FoodPage(_matchs[index].foodId)));
         },
         child: Dismissible(
           key: Key(_matchs[index].id.toString()),

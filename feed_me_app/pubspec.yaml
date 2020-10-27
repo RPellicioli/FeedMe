@@ -44,7 +44,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
+  fonts:
+    - family: Righteous
+      fonts:
+        - asset: fonts/Righteous-Regular.ttf
+          weight: 700
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

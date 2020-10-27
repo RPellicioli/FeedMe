@@ -1,4 +1,4 @@
-import 'package:feed_me_app/pages/matchs_page.dart';
+import 'package:feed_me_app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -18,15 +18,15 @@ class MyApp extends StatelessWidget {
             title: "FeedMe",
             theme: ThemeData(
                 primarySwatch: Colors.deepOrange,
-                primaryColor: Color.fromARGB(255, 255, 171, 124)),
+                primaryColor: Color(0xFFf45d27)),
             debugShowCheckedModeBanner: false,
-            home: MatchsPage());
+            home: LoginPage());
       }),
     );
   }
 }
 
-//orange Color.fromARGB(255, 255, 171, 124);
+//orange Color(0xFFf45d27);
 //green Color.fromARGB(255, 119, 195, 72);
 //red Color.fromARGB(255, 252, 78, 78);
 //purple Color.fromARGB(255, 153, 77, 156);

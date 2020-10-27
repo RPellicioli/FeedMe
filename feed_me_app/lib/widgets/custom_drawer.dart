@@ -1,4 +1,5 @@
 import 'package:feed_me_app/models/user_model.dart';
+import 'package:feed_me_app/pages/login_page.dart';
 import 'package:feed_me_app/tile/drawer_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -13,7 +14,7 @@ class CustomDrawer extends StatelessWidget {
     Widget _buildDrawerBack() => Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                  colors: [Color.fromARGB(255, 203, 236, 241), Colors.white],
+                  colors: [Colors.white, Colors.grey],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter)),
         );
@@ -35,9 +36,9 @@ class CustomDrawer extends StatelessWidget {
                       top: 8.0,
                       left: 0.0,
                       child: Text(
-                        "Flutter's\nClothing",
+                        "FeedMe",
                         style: TextStyle(
-                            fontSize: 34.0, fontWeight: FontWeight.bold),
+                            fontSize: 34.0, fontFamily: 'Righteous',fontWeight: FontWeight.bold),
                       ),
                     ),
                     Positioned(
@@ -63,8 +64,9 @@ class CustomDrawer extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   onTap: () {
-                                    Navigator.of(context).pop();
-                                    model.signOut();
+                                    UserModel.of(context).signOut();
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder: (context) => LoginPage()));
                                   },
                                 )
                               ],
