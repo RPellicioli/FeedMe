@@ -64,9 +64,18 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
 
 //Get food by id
 router.get('/:id', authService.verifyToken, (req, res, next) => {
-    connection.query('SELECT * FROM food WHERE id = ?', [req.params.id], (error, rows, fields) => {
+    const lat = Number(req.query.lat);
+    const lon = Number(req.query.lon);
+
+    connection.query('SELECT f.id, f.restaurantId, f.name as name, r.name as restaurantName, r.street, r.number, r.neighborhood, r.city, r.state, f.image, f.price, f.description, f.active, r.latitude, r.longitude FROM food as f LEFT JOIN restaurant as r ON r.id = f.restaurantId WHERE f.id = ?', [req.params.id], (error, rows, fields) => {
         if (!error) {
-            res.status(200).send(rows[0]);
+            if(rows && rows.length > 0){
+                rows[0]["distance"] = Number(calcCrow(lat, lon, rows[0].latitude, rows[0].longitude).toFixed(1));
+                res.status(200).send(rows[0]);
+            }
+            else{
+                res.status(200).send([]);
+            }
         }
         else {
             console.log(error);
@@ -182,6 +191,25 @@ const uploadImageToStorage = (file, path) => {
 
         blobStream.end(file.buffer);
     });
+}
+
+const calcCrow = (lat1, lon1, lat2, lon2) => {
+    var R = 6371; // km
+    var dLat = toRad(lat2-lat1);
+    var dLon = toRad(lon2-lon1);
+    var lat1 = toRad(lat1);
+    var lat2 = toRad(lat2);
+
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c;
+    return d;
+}
+
+// Converts numeric degrees to radians
+const toRad = (value) => {
+    return value * Math.PI / 180;
 }
 
 module.exports = router;
