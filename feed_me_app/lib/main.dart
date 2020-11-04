@@ -8,7 +8,18 @@ void main() {
   runApp(new MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModel<UserModel>(
@@ -25,6 +36,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 //orange Color(0xFFf45d27);
 //green Color.fromARGB(255, 119, 195, 72);

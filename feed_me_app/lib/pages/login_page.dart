@@ -2,6 +2,8 @@ import 'package:feed_me_app/models/user_model.dart';
 import 'package:feed_me_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,10 +19,14 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
+
+    _checkPermission();
   }
 
   @override
@@ -52,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                         'FeedMe',
                         style: TextStyle(
                             fontFamily: 'Righteous',
-                            fontSize: 32.0,
+                            fontSize: 42.0,
                             color: Colors.white),
                       ),
                     ),
@@ -202,5 +208,42 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _checkPermission() async {
+    var locationPermissionStatus = await Permission.location.status;
+
+    if(!locationPermissionStatus.isGranted){
+      PermissionStatus status = await Permission.location.request();
+    }
+
+    _getCurrentLocation();
+  }
+
+  void _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        UserModel.of(context).currentPosition = position;
+      });
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  void _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          UserModel.of(context).currentPosition.latitude, UserModel.of(context).currentPosition.longitude);
+      Placemark place = p[0];
+      setState(() {
+        UserModel.of(context).currentAddress =
+        "${place.locality}, ${place.postalCode}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

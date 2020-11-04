@@ -16,7 +16,6 @@ class FoodPage extends StatefulWidget {
 
 class _FoodPageState extends State<FoodPage> {
   final int id;
-
   String _token;
   Food _food;
 
@@ -46,7 +45,8 @@ class _FoodPageState extends State<FoodPage> {
         backgroundColor: Color(0xFFf45d27),
         body: Container(
             child: FutureBuilder(
-                future: getFood(id, _token),
+                future:
+                    getFood(id, _token, UserModel.of(context).currentPosition),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     _food = snapshot.data;
@@ -56,9 +56,7 @@ class _FoodPageState extends State<FoodPage> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                })
-        )
-    );
+                })));
   }
 
   Widget createCard() {
@@ -118,7 +116,7 @@ class _FoodPageState extends State<FoodPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              _food != null ? "Chica Pitanga" : "",
+                              _food != null ? _food.restaurantName : "",
                               style: TextStyle(
                                   color: Color.fromRGBO(128, 128, 128, 1),
                                   fontSize: 17.0,
@@ -131,7 +129,8 @@ class _FoodPageState extends State<FoodPage> {
                                     child: Icon(Icons.location_on, size: 22),
                                   ),
                                   TextSpan(
-                                      text: "1.2km",
+                                      text:
+                                          "${_food != null ? _food.distance.toStringAsFixed(2) : 0.0}km",
                                       style: TextStyle(
                                           color:
                                               Color.fromRGBO(128, 128, 128, 1),
@@ -142,16 +141,22 @@ class _FoodPageState extends State<FoodPage> {
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            _food != null
-                                ? "R. Petrolina, 19 - Boa Viagem, Recife - PE, 51021-250"
-                                : "",
-                            style: TextStyle(
-                                color: Color.fromRGBO(128, 128, 128, 1),
-                                fontSize: 14.0),
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  _food != null
+                                      ? _food.street + ", " + _food.number.toString() + " - " + _food.neighborhood + ", " + _food.city + " - " + _food.state
+                                      : "",
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(128, 128, 128, 1),
+                                      fontSize: 14.0),
+                                ),
+                              ),
+                            )
+                          ],
                         )
                       ],
                     ),

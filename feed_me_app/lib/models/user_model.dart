@@ -5,12 +5,15 @@ import 'package:feed_me_app/services/login_service.dart';
 import 'package:feed_me_app/services/users_service.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class UserModel extends Model {
   User userData = User();
   bool isLoading = false;
   bool loggedId = false;
   String userToken;
+  Position currentPosition;
+  String currentAddress;
 
   static UserModel of(BuildContext context) =>
       ScopedModel.of<UserModel>(context);

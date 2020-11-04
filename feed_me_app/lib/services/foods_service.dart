@@ -6,6 +6,7 @@ import 'package:feed_me_app/entities/food.dart';
 import 'package:http/http.dart' as http;
 
 import 'global_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 final String pathUrl = "foods";
 
@@ -27,8 +28,9 @@ Future<Food> getRandomFood(
   return Food.fromJson(responseJson);
 }
 
-Future<Food> getFood(int id, String token) async {
-  final response = await http.get(baseUrl + pathUrl + "/${id.toString()}",
+Future<Food> getFood(int id, String token, Position currentPosition) async {
+  final response = await http.get(baseUrl + pathUrl + "/${id.toString()}" +
+      "?lat=${currentPosition.latitude.toString()}&lon=${currentPosition.longitude.toString()}",
       headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
   final responseJson = jsonDecode(response.body);
 
