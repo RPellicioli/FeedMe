@@ -216,7 +216,6 @@ class _LoginPageState extends State<LoginPage> {
     if(!locationPermissionStatus.isGranted){
       PermissionStatus status = await Permission.location.request();
     }
-
     _getCurrentLocation();
   }
 

@@ -54,6 +54,11 @@ flutter:
       fonts:
         - asset: fonts/Righteous-Regular.ttf
           weight: 700
+    - family: Mulish
+      fonts:
+          - asset: fonts/Mulish-Regular.ttf
+          - asset: fonts/Mulish-Bold.ttf
+            weight: 700
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

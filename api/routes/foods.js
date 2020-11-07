@@ -37,11 +37,11 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
     let lonmax = lon - Δlon;
 
     let listIds = [];
-    let query = 'SELECT f.name, f.image FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ?';
+    let query = 'SELECT f.id, f.restaurantId, f.name as name, r.name as restaurantName, r.street, r.number, r.neighborhood, r.city, r.state, f.image, f.price, f.description, f.active, r.latitude, r.longitude FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ?';
 
     if(req.query.listIds){
         listIds = JSON.parse(req.query.listIds);
-        query = 'SELECT f.name, f.image FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ? AND f.id NOT IN (?)';
+        query += ' AND f.id NOT IN (?)';
     }
 
     connection.query(query, [latmin, latmax, lonmin, lonmax, listIds], (error, rows, fields) => {
@@ -50,6 +50,7 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
 
             if(rows && rows.length > 0){
                 food = rows[Math.floor(Math.random() * rows.length)];
+                food['distance'] = Number(calcCrow(lat, lon, food.latitude, food.longitude).toFixed(1));
             }
 
             res.status(200).send(food);

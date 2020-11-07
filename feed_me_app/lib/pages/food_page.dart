@@ -66,7 +66,7 @@ class _FoodPageState extends State<FoodPage> {
       child: Column(
         children: [
           Container(
-              height: 220.0,
+              height: 260.0,
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: _food != null

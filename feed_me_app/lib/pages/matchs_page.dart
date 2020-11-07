@@ -49,16 +49,45 @@ class _MatchsPageState extends State<MatchsPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 _matchs = snapshot.data;
-                return buildList();
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+
+                if (_matchs != null && _matchs.length > 0) {
+                  return _buildList();
+                }
+
+                return _emptyList();
               }
+
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }));
   }
 
-  Widget buildList() {
+  Widget _emptyList() {
+    return Column(children: <Widget>[
+      Container(
+        padding: EdgeInsets.fromLTRB(20.0, 20.0, 5.0, 20.0),
+        child: Row(
+          children: <Widget>[
+            Text("Minhas escolhas",
+                style: TextStyle(
+                    fontSize: 24.0, color: Color.fromARGB(255, 153, 77, 156)))
+          ],
+        ),
+      ),
+      Container(
+          height: MediaQuery.of(context).size.height / 2 + 100.0,
+          child: Center(
+            child: Text(
+              "Sua lista está vazia",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.0, color: Colors.grey),
+            ),
+          ))
+    ]);
+  }
+
+  Widget _buildList() {
     return Column(
       children: <Widget>[
         Container(
@@ -133,10 +162,11 @@ class _MatchsPageState extends State<MatchsPage> {
                     label: "Desfazer",
                     onPressed: () {
                       setState(() {
-                        postMatch(_userId, _lastRemoved, _token).then((id) => {
-                              getMatchs(_userId, _token)
-                                  .then((data) => _matchs = data)
-                            });
+                        postMatch(_userId, _lastRemoved.foodId, _token).then(
+                            (id) => {
+                                  getMatchs(_userId, _token)
+                                      .then((data) => _matchs = data)
+                                });
                       });
                     }),
                 duration: Duration(seconds: 5),

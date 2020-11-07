@@ -14,10 +14,10 @@ Future<void> deleteMatch(int id, String token) async {
       headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
 }
 
-Future<int> postMatch(int userId, UserMatch userMatch, String token) async {
+Future<int> postMatch(int userId, int foodId, String token) async {
   final response = await http.post(baseUrl + pathUrl,
       headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
-      body: {'userId': userId.toString(), 'foodId': userMatch.foodId.toString()});
+      body: {'userId': userId.toString(), 'foodId': foodId.toString()});
 
   final responseJson = jsonDecode(response.body);
 

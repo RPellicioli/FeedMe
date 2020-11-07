@@ -28,6 +28,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
             title: "FeedMe",
             theme: ThemeData(
+                fontFamily: 'Mulish',
                 primarySwatch: Colors.deepOrange,
                 primaryColor: Color(0xFFf45d27)),
             debugShowCheckedModeBanner: false,
