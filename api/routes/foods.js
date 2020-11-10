@@ -21,11 +21,34 @@ const multer = Multer({
 
 const bucket = storage.bucket('feedme-app');
 
+const calcCrow = (lat1, lon1, lat2, lon2) => {
+    var R = 6371; // km
+    var dLat = toRad(lat2-lat1);
+    var dLon = toRad(lon2-lon1);
+    var lat1 = toRad(lat1);
+    var lat2 = toRad(lat2);
+
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c;
+    return d;
+}
+
+// Converts numeric degrees to radians
+const toRad = (value) => {
+    return (value * Math.PI) / 180;
+}
+
+const toDeg = (value) => {
+    return (value * 180) / Math.PI;
+}
+
 //Get food different listId
 router.get('/random', authService.verifyToken, (req, res, next) => {
-    const km = 200;
-    const lat = Number(req.query.lat);
-    const lon = Number(req.query.lon);
+    const km = 6;
+    const lat = toRad(Number(req.query.lat));
+    const lon = toRad(Number(req.query.lon));
     
     // r = D/R = (km/6371km 'tamanho da terra' ) = rad
     let rad = km/6371;
@@ -33,8 +56,14 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
     let latmax = lat + rad;
 
     let Δlon = Math.asin(Math.sin(rad) / Math.cos(lat));
-    let lonmin = lon + Δlon;
-    let lonmax = lon - Δlon;
+    let lonmin = lon - Δlon;
+    let lonmax = lon + Δlon;
+
+    var latminDeg = toDeg(latmin);
+    var latmaxDeg = toDeg(latmax);
+
+    var lonminDeg = toDeg(lonmin);
+    var lonmaxDeg = toDeg(lonmax);
 
     let listIds = [];
     let query = 'SELECT f.id, f.restaurantId, f.name as name, r.name as restaurantName, r.street, r.number, r.neighborhood, r.city, r.state, f.image, f.price, f.description, f.active, r.latitude, r.longitude FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ?';
@@ -44,13 +73,13 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
         query += ' AND f.id NOT IN (?)';
     }
 
-    connection.query(query, [latmin, latmax, lonmin, lonmax, listIds], (error, rows, fields) => {
+    connection.query(query, [latminDeg, latmaxDeg, lonminDeg, lonmaxDeg, listIds], (error, rows, fields) => {
         if (!error) {
             let food = { };
 
             if(rows && rows.length > 0){
                 food = rows[Math.floor(Math.random() * rows.length)];
-                food['distance'] = Number(calcCrow(lat, lon, food.latitude, food.longitude).toFixed(1));
+                food['distance'] = Number(calcCrow(req.query.lat, req.query.lon, food.latitude, food.longitude).toFixed(1));
             }
 
             res.status(200).send(food);
@@ -192,25 +221,6 @@ const uploadImageToStorage = (file, path) => {
 
         blobStream.end(file.buffer);
     });
-}
-
-const calcCrow = (lat1, lon1, lat2, lon2) => {
-    var R = 6371; // km
-    var dLat = toRad(lat2-lat1);
-    var dLon = toRad(lon2-lon1);
-    var lat1 = toRad(lat1);
-    var lat2 = toRad(lat2);
-
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    var d = R * c;
-    return d;
-}
-
-// Converts numeric degrees to radians
-const toRad = (value) => {
-    return value * Math.PI / 180;
 }
 
 module.exports = router;
