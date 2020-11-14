@@ -1,5 +1,6 @@
 import 'package:feed_me_app/models/user_model.dart';
 import 'package:feed_me_app/pages/home_page.dart';
+import 'package:feed_me_app/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -33,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: Color.fromARGB(242, 242, 242, 255),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -67,9 +69,15 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 32, right: 38),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        child: GestureDetector(
+                          child: Text(
+                            'Cadastre-se',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => RegisterPage()));
+                          },
                         ),
                       ),
                     ),

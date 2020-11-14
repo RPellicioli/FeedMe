@@ -51,9 +51,15 @@ Future<void> deleteAllMatchs(int userId, String token) async {
 
 Future<int> postUser(User user) async {
   final response = await http.post(baseUrl + pathUrl,
-      body: jsonEncode(user));
+      body: {
+        'name': user.name,
+        'email': user.email,
+        'password': user.password,
+        'admin': '0'
+      });
 
   final responseJson = jsonDecode(response.body);
+  print(responseJson);
 
   return responseJson['id'];
 }

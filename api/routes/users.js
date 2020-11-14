@@ -75,10 +75,10 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 });
 
 //Insert an user
-router.post('/', authService.verifyToken, (req, res, next) => {
+router.post('/', (req, res, next) => {
     const post = req.body;
     const created = dateUtils.getCurrentDate();
-    const query = 'INSERT INTO user(`name`, `email`, `password`, `admin`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO user(`name`, `email`, `password`, `admin`, `created`) VALUES (?, ?, ?, ?, ?)';
 
     connection.query(query, [post.name, post.email, post.password, post.admin, created], (error, rows, fields) => {
         if (!error) {
