@@ -59,7 +59,6 @@ Future<int> postUser(User user) async {
       });
 
   final responseJson = jsonDecode(response.body);
-  print(responseJson);
 
   return responseJson['id'];
 }
