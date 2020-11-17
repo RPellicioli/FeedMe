@@ -14,6 +14,7 @@ class UserModel extends Model {
   String userToken;
   Position currentPosition;
   String currentAddress;
+  List<int> foodIds = new List();
 
   static UserModel of(BuildContext context) =>
       ScopedModel.of<UserModel>(context);

@@ -9,6 +9,7 @@ CREATE TABLE `user` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `km` float(10,2) NOT NULL,
   `admin` tinyint(1) DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -74,20 +75,20 @@ CREATE TABLE `match` (
 
 /* USUÁRIOS.*/
 
-INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
-       VALUES ('Ricardo Pellicioli', 'pellicioli_r@hotmail.com', '12345', 0, CURRENT_TIME(), CURRENT_TIME());
+INSERT INTO user(`name`, `email`, `password`, `km`, `admin`, `created`, `updated`)
+       VALUES ('Ricardo Pellicioli', 'pellicioli_r@hotmail.com', '12345', 10, 0, CURRENT_TIME(), CURRENT_TIME());
 
-INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
-       VALUES ('Di Paollo', 'dipaollo@teste.com', 'teste', 1, CURRENT_TIME(), CURRENT_TIME());
+INSERT INTO user(`name`, `email`, `password`, `km`, `admin`, `created`, `updated`)
+       VALUES ('Di Paollo', 'dipaollo@teste.com', 'teste', 10, 1, CURRENT_TIME(), CURRENT_TIME());
 
-INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
-       VALUES ('Mafacioli', 'mafacioli@teste.com', 'teste', 1, CURRENT_TIME(), CURRENT_TIME());
+INSERT INTO user(`name`, `email`, `password`, `km`, `admin`, `created`, `updated`)
+       VALUES ('Mafacioli', 'mafacioli@teste.com', 'teste', 10, 1, CURRENT_TIME(), CURRENT_TIME());
 
-INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
-       VALUES ('Pernambuco', 'pernambuco@teste.com', 'teste', 1, CURRENT_TIME(), CURRENT_TIME());
+INSERT INTO user(`name`, `email`, `password`, `km`, `admin`, `created`, `updated`)
+       VALUES ('Pernambuco', 'pernambuco@teste.com', 'teste', 10, 1, CURRENT_TIME(), CURRENT_TIME());
 
-INSERT INTO user(`name`, `email`, `password`, `admin`, `created`, `updated`)
-       VALUES ('Andréa', 'andrea@teste.com', 'teste', 1, CURRENT_TIME(), CURRENT_TIME());
+INSERT INTO user(`name`, `email`, `password`, `km`, `admin`, `created`, `updated`)
+       VALUES ('Andréa', 'andrea@teste.com', 'teste', 10, 1, CURRENT_TIME(), CURRENT_TIME());
 
 
 /* RESTAURANTES.*/

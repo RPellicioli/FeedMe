@@ -78,9 +78,9 @@ router.delete('/:id', authService.verifyToken, (req, res, next) => {
 router.post('/', (req, res, next) => {
     const post = req.body;
     const created = dateUtils.getCurrentDate();
-    const query = 'INSERT INTO user(`name`, `email`, `password`, `admin`, `created`) VALUES (?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO user(`name`, `email`, `password`, `km`, `admin`, `created`) VALUES (?, ?, ?, ?, ?, ?)';
 
-    connection.query(query, [post.name, post.email, post.password, post.admin, created], (error, rows, fields) => {
+    connection.query(query, [post.name, post.email, post.password, post.km, post.admin, created], (error, rows, fields) => {
         if (!error) {
             res.status(201).send({ id: rows.insertId });
         }
@@ -96,9 +96,9 @@ router.post('/', (req, res, next) => {
 router.put('/:id', authService.verifyToken, (req, res, next) => {
     const post = req.body;
     const updated = dateUtils.getCurrentDate();
-    const query = 'UPDATE user SET `name` = ?, `email` = ?, `password` = ?, `admin` = ?, `updated` = ?  WHERE id = ?';
+    const query = 'UPDATE user SET `name` = ?, `email` = ?, `password` = ?, `km` = ?, `admin` = ?, `updated` = ?  WHERE id = ?';
 
-    connection.query(query, [post.name, post.email, post.password, post.admin, updated, req.params.id], (error, rows, fields) => {
+    connection.query(query, [post.name, post.email, post.password, post.km, post.admin, updated, req.params.id], (error, rows, fields) => {
         if (!error) {
             res.status(200).send('Updated successfully');
         }

@@ -11,21 +11,21 @@ import 'package:geolocator/geolocator.dart';
 final String pathUrl = "foods";
 
 Future<Food> getRandomFood(
-    token, Position currentPosition, {List<int> listIds}) async {
+    token, Position currentPosition, double km, {List<int> foodIds}) async {
 
   String listParams = "";
 
-  if(listIds != null){
-    listIds.forEach((id) {
-      listParams += "?listIds=" + id.toString();
+  if(foodIds != null){
+    foodIds.forEach((id) {
+      listParams += "&foodIds=" + id.toString();
     });
   }
 
   String url = baseUrl +
       pathUrl +
-      "/random?lat=${currentPosition.latitude.toString()}&lon=${currentPosition.longitude.toString()}" +
+      "/random?km=${km.toString()}&lat=${currentPosition.latitude.toString()}&lon=${currentPosition.longitude.toString()}" +
       listParams;
-
+  
   final response = await http.get(url,
       headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
   final responseJson = jsonDecode(response.body);

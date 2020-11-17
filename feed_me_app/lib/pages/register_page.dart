@@ -203,6 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     name: _nameController.text,
                                     email: _emailController.text,
                                     password: _passController.text,
+                                    km: 10.0,
                                     admin: 0);
                                 postUser(user).then((value) => {
                                       UserModel.of(context).signIn(

@@ -44,9 +44,9 @@ const toDeg = (value) => {
     return (value * 180) / Math.PI;
 }
 
-//Get food different listId
+//Get food different foodIds
 router.get('/random', authService.verifyToken, (req, res, next) => {
-    const km = 6;
+    const km = Number(req.query.km);
     const lat = toRad(Number(req.query.lat));
     const lon = toRad(Number(req.query.lon));
     
@@ -65,15 +65,19 @@ router.get('/random', authService.verifyToken, (req, res, next) => {
     var lonminDeg = toDeg(lonmin);
     var lonmaxDeg = toDeg(lonmax);
 
-    let listIds = [];
+    let foodIds = [];
     let query = 'SELECT f.id, f.restaurantId, f.name as name, r.name as restaurantName, r.street, r.number, r.neighborhood, r.city, r.state, f.image, f.price, f.description, f.active, r.latitude, r.longitude FROM restaurant as r RIGHT JOIN food AS f ON f.restaurantId = r.id WHERE r.latitude BETWEEN ? AND ? AND r.longitude BETWEEN ? AND ?';
 
-    if(req.query.listIds){
-        listIds = JSON.parse(req.query.listIds);
-        query += ' AND f.id NOT IN (?)';
+    if(req.query.foodIds && Array.isArray(req.query.foodIds)){
+        req.query.foodIds.forEach(id => foodIds.push(id));
+        query += ` AND f.id NOT IN (${foodIds.map((id) => connection.escape(id))})`;
+    }
+    else if(req.query.foodIds){
+        foodIds = JSON.parse(req.query.foodIds);
+        query += ` AND f.id NOT IN (?)`;
     }
 
-    connection.query(query, [latminDeg, latmaxDeg, lonminDeg, lonmaxDeg, listIds], (error, rows, fields) => {
+    connection.query(query, [latminDeg, latmaxDeg, lonminDeg, lonmaxDeg, foodIds], (error, rows, fields) => {
         if (!error) {
             let food = { };
 

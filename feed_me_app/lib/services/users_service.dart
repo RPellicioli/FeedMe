@@ -55,6 +55,7 @@ Future<int> postUser(User user) async {
         'name': user.name,
         'email': user.email,
         'password': user.password,
+        'km': user.km.toString(),
         'admin': '0'
       });
 
@@ -66,7 +67,13 @@ Future<int> postUser(User user) async {
 Future<String> updateUser(int userId, User user, String token) async {
   final response = await http.put(baseUrl + pathUrl + "/${userId.toString()}",
       headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
-      body: jsonEncode(user));
+      body: {
+      'name': user.name,
+      'email': user.email,
+      'password': user.password,
+      'km': user.km.toString(),
+      'admin': '0'
+      });
 
   return response.body;
 }

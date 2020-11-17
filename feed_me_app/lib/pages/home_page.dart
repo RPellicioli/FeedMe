@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:feed_me_app/models/user_model.dart';
 
 import 'find_page.dart';
+import 'profile_page.dart';
 
 class HomePage extends StatelessWidget {
   final _pageController = PageController();
@@ -22,6 +23,10 @@ class HomePage extends StatelessWidget {
         Scaffold(
             appBar: createAppBarMatchs(context, _pageController),
             body: MatchsPage(),
+            drawer: CustomDrawer(_pageController)),
+        Scaffold(
+            appBar: createAppBar(context),
+            body: ProfilePage(),
             drawer: CustomDrawer(_pageController))
       ],
     );

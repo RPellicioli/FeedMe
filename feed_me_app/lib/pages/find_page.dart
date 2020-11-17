@@ -15,20 +15,22 @@ class _FindPageState extends State<FindPage> {
   Future _foodFuture;
   Food _food;
   String _token;
+  List<int> _foodIds;
   Position _position;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _foodIds = UserModel.of(context).foodIds;
     _token = UserModel.of(context).userToken;
     _position = UserModel.of(context).currentPosition;
 
-    _foodFuture = _getRandomFood(_token, _position);
+    _foodFuture = _getRandomFood(_token, _position, foodIds: _foodIds);
   }
 
-  _getRandomFood(token, Position currentPosition, {List<int> listIds}) async {
-    return await getRandomFood(_token, _position);
+  _getRandomFood(token, Position currentPosition, {List<int> foodIds}) async {
+    return await getRandomFood(_token, _position, UserModel.of(context).userData.km, foodIds: foodIds);
   }
 
   @override
@@ -149,7 +151,8 @@ class _FindPageState extends State<FindPage> {
               ),
               onTap: () {
                 setState(() {
-                  _foodFuture = _getRandomFood(_token, _position);
+                  _foodIds.add(_food.id);
+                  _foodFuture = _getRandomFood(_token, _position, foodIds: _foodIds);
                 });
               },
             ),
@@ -171,9 +174,10 @@ class _FindPageState extends State<FindPage> {
               ),
               onTap: () {
                 setState(() {
+                  _foodIds.add(_food.id);
                   postMatch(UserModel.of(context).userData.id, _food.id, _token);
 
-                  _foodFuture = _getRandomFood(_token, _position);
+                  _foodFuture = _getRandomFood(_token, _position, foodIds: _foodIds);
                 });
               },
             )
