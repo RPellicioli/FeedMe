@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'models/user_model.dart';
 
-void main() {
+void main() async {
   runApp(new MyApp());
 }
 
@@ -14,6 +14,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Widget _page;
+
   @override
   void initState() {
     // TODO: implement initState

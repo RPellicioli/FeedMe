@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
+  var _loading = true;
 
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -32,7 +34,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _loading ? Center(
+      child: CircularProgressIndicator(),
+    ) : Scaffold(
       key: _scaffoldKey,
       backgroundColor: Color.fromARGB(242, 242, 242, 255),
       body: SingleChildScrollView(
@@ -49,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                       colors: [Color(0xFFf45d27), Color(0xFFf5851f)],
                     ),
                     borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(90))),
+                    BorderRadius.only(bottomLeft: Radius.circular(90))),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -101,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                                 top: 4, left: 16, right: 16, bottom: 4),
                             decoration: BoxDecoration(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
+                                BorderRadius.all(Radius.circular(50)),
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
@@ -131,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                                 top: 4, left: 16, right: 16, bottom: 4),
                             decoration: BoxDecoration(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
+                                BorderRadius.all(Radius.circular(50)),
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
@@ -197,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                               colors: [Color(0xFFf45d27), Color(0xFFf5851f)],
                             ),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(50))),
+                            BorderRadius.all(Radius.circular(50))),
                         child: Center(
                           child: Text(
                             'Entrar'.toUpperCase(),
@@ -227,12 +231,35 @@ class _LoginPageState extends State<LoginPage> {
     _getCurrentLocation();
   }
 
+  void _autoLogIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userEmail = prefs.getString('userEmail');
+    final String userPassword = prefs.getString('userPassword');
+
+    if(userEmail != null){
+      UserModel.of(context).signIn(
+          email: userEmail,
+          password: userPassword,
+          onSuccess: () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePage()));
+          },
+          onFail: () {
+            _loading = false;
+          });
+    }
+    else{
+      _loading = false;
+    }
+  }
+
   void _getCurrentLocation() {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
         UserModel.of(context).currentPosition = position;
+        _autoLogIn();
       });
       _getAddressFromLatLng();
     }).catchError((e) {

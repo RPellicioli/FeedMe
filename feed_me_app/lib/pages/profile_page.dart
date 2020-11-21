@@ -61,8 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Text(
                             "Nome",
-                            style: TextStyle(
-                                fontSize: 14.0),
+                            style: TextStyle(fontSize: 14.0),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width / 1.2,
@@ -92,8 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Text(
                             "Distância (Km)",
-                            style: TextStyle(
-                                fontSize: 14.0),
+                            style: TextStyle(fontSize: 14.0),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width / 1.2,
@@ -152,21 +150,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                     admin: 0);
                                 updateUser(UserModel.of(context).userData.id,
                                         user, UserModel.of(context).userToken)
-                                    .then((value) => {
-                                          _scaffoldKey.currentState
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                                "Dados atualizados com sucesso",
-                                                textAlign: TextAlign.center),
-                                            backgroundColor: Color.fromARGB(
-                                                255, 119, 195, 72),
-                                            duration: Duration(seconds: 2),
-                                          ))
-                                        });
+                                    .then((value) {
+                                  UserModel.of(context).userData.name =
+                                      _nameController.text;
+                                  UserModel.of(context).userData.km =
+                                      double.parse(_kmController.text);
+                                  _scaffoldKey.currentState
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Dados atualizados com sucesso",
+                                        textAlign: TextAlign.center),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 119, 195, 72),
+                                    duration: Duration(seconds: 2),
+                                  ));
+                                });
                               }
                             },
                             color: Color.fromARGB(255, 119, 195, 72),
-                            child: const Text('Registrar',
+                            child: const Text('Salvar',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 20)),
                           ),

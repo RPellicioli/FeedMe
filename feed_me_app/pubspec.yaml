@@ -39,6 +39,7 @@ dependencies:
   google_api_availability: ^2.0.4  # Geolocator Dependency.
   meta: any
   permission_handler: 5.0.1+1
+  shared_preferences: ^0.5.1+2
 
 dev_dependencies:
   flutter_test:

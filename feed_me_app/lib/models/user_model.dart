@@ -6,6 +6,7 @@ import 'package:feed_me_app/services/users_service.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserModel extends Model {
   User userData = User();
@@ -30,7 +31,7 @@ class UserModel extends Model {
       signIn(
           email: userData.email,
           password: userData.password,
-          onSuccess: () {
+          onSuccess: () async {
             isLoading = false;
             notifyListeners();
             onSuccess();
@@ -58,6 +59,10 @@ class UserModel extends Model {
     login(email, password).then((data) async {
       await _loadCurrentUser(data["userId"], data["token"]);
 
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userEmail', email);
+      prefs.setString('userPassword', password);
+
       userToken = data["token"];
 
       loggedId = true;
@@ -72,6 +77,10 @@ class UserModel extends Model {
   }
 
   void signOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('userEmail', null);
+    prefs.setString('userPassword', null);
+
     userData = User();
     loggedId = false;
     userToken = "";
