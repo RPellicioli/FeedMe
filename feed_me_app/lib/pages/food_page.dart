@@ -66,7 +66,7 @@ class _FoodPageState extends State<FoodPage> {
       child: Column(
         children: [
           Container(
-              height: 260.0,
+              height: 280.0,
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: _food != null
@@ -152,7 +152,7 @@ class _FoodPageState extends State<FoodPage> {
                                       : "",
                                   style: TextStyle(
                                       color: Color.fromRGBO(128, 128, 128, 1),
-                                      fontSize: 14.0),
+                                      fontSize: 15.0),
                                 ),
                               ),
                             )
@@ -193,7 +193,7 @@ class _FoodPageState extends State<FoodPage> {
                                   _food != null ? _food.description : "",
                                   style: TextStyle(
                                       color: Color.fromRGBO(128, 128, 128, 1),
-                                      fontSize: 14.0),
+                                      fontSize: 15.0),
                                 ),
                               ),
                             ],

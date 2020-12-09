@@ -73,7 +73,8 @@ class HomePage extends StatelessWidget {
       child: Text("Sim"),
       onPressed:  () async {
         await deleteAllMatchs(UserModel.of(context).userData.id, UserModel.of(context).userToken);
-        pageController.jumpToPage(1);
+        UserModel.of(context).foodIds = new List();
+        pageController.jumpToPage(0);
         Navigator.pop(context);
       },
     );
